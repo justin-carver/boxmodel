@@ -1,0 +1,16 @@
+{
+	"0": {
+		"instructions": "<div><h2>Block Models</h2><p>When it comes to CSS, learning the box model is a core concept of the rest of learning this.</p></div>",
+		"underlay": [],
+		"blocks": [
+			{
+				"position": {},
+				"style": {}
+			},
+			{
+				"position": {},
+				"style": {}
+			}
+		]
+	}
+}

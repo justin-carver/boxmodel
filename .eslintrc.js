@@ -17,5 +17,7 @@ module.exports = {
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'linebreak-style': 'windows',
+    indent: 'tab',
   },
 };
