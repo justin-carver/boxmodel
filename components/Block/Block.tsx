@@ -9,7 +9,7 @@ const Block = (props: any) => {
 	return (
 		<motion.div
 			// ref={}
-			className={`${classes.object} block 22`}
+			className={`${classes.object} block`}
 			initial={{ opacity: 0, y: 30 }}
 			animate={{ opacity: 1, y: 0 }}>
 			<Center className={classes.center}>

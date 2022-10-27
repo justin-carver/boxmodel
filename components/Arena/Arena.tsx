@@ -1,53 +1,55 @@
 import parse from 'html-react-parser';
-import { useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useRef, useState } from 'react';
 
 import { Grid, Group, Stack, Text } from '@mantine/core';
 
 import levels from '../../data/levels.json';
+// import { convertCSS, convertToCamelCase } from '../../lib/utils';
+import { convert } from '@americanexpress/css-to-js';
 import Block from '../Block/Block';
 import useStyles from './Arena.styles';
 
-const Arena = () => {
+const Arena = (props: any) => {
 	const { classes } = useStyles();
+	const [arenaCSS, setArenaCSS] = useState<CSSProperties>();
 	const [blocks, setBlocks] = useState<Array<JSX.Element>>([]);
-	const [injectedCSS, setInjectedCSS] = useState<string>('');
 
+	// TODO: This should be saved to localStoage at some point.
 	const playerObject = {
 		level: 0,
 	};
 
 	const generateLevel = (level: number) => {
-		// Get the level from the level object.
-		switch (level) {
-			case 0:
-				setBlocks([]); // Reset level blocks
-				for (let block of levels[0 as keyof object][
-					'blocks'
-				] as Array<object>) {
-					setBlocks((prevBlocks) => [
-						...prevBlocks,
-						<Block key={Math.random()} />,
-					]);
-				}
-				break;
-			default:
-				break;
+		setBlocks([]); // Reset level blocks
+		for (let block of levels[level as keyof object][
+			'blocks'
+		] as Array<object>) {
+			setBlocks((prevBlocks) => [
+				...prevBlocks,
+				<Block key={Math.random()} />,
+			]);
 		}
-		// Add props to <Block />
-		// Iterate through array depending on level information, create ref, and add it to block list.
 	};
 
 	useEffect(() => {
-		generateLevel(0);
+		try {
+			let convertedCSS = convert(props.codePassthrough);
+			setArenaCSS(convertedCSS['$waldorf'] as CSSProperties);
+		} catch {
+			// Do nothing, CSS will not update.
+		}
+	}, [props.codePassthrough]);
+
+	useEffect(() => {
+		generateLevel(0); // Start
 	}, []);
 
 	return (
 		<>
 			<Stack>
-				<Text
-					className={
-						classes.header
-					}>{`Level ${playerObject.level}!`}</Text>
+				<Text className={classes.header}>{`LEVEL ${
+					playerObject.level + 1
+				}!`}</Text>
 				<Text className={classes.subheader}>
 					Blocks, Widths, & Heights
 				</Text>
@@ -58,10 +60,10 @@ const Arena = () => {
 					justify={'flex-start'}
 					grow>
 					<Grid.Col sm={6} xs={3}>
-						{/* parse the HTML string with html-react-parse */}
 						<Group
 							className={classes.instructions}
 							align={'flex-start'}>
+							{/* parse the HTML string with html-react-parse */}
 							{parse(
 								levels[playerObject.level as keyof object][
 									'instructions'
@@ -70,7 +72,9 @@ const Arena = () => {
 						</Group>
 					</Grid.Col>
 					<Grid.Col sm={6} xs={3}>
-						<Group className={classes.arena}>
+						<Group
+							style={arenaCSS}
+							className={`${classes.arena} cssInjectionPoint`}>
 							<Group>{blocks.map((block) => block)}</Group>
 						</Group>
 					</Grid.Col>

@@ -8,14 +8,18 @@ import { Group } from '@mantine/core';
 
 import useStyles from './CSSEditor.styles';
 
-const CSSEditor = () => {
+const CSSEditor = (props: any) => {
 	const { classes } = useStyles();
 	const [code, setCode] = useState(`#waldorf {
     margin: 25px;
     background-color: rgb(240,240,240);
     font-family: arial, sans-serif;
     font-size: 14px;
-  }`);
+}`);
+
+	useEffect(() => {
+		props.updateCode(code);
+	}, [code]);
 
 	return (
 		<Group position="center">

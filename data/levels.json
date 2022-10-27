@@ -4,10 +4,12 @@
 		"underlay": [],
 		"blocks": [
 			{
+				"name": "waldorf",
 				"position": {},
 				"style": {}
 			},
 			{
+				"name": "",
 				"position": {},
 				"style": {}
 			}
